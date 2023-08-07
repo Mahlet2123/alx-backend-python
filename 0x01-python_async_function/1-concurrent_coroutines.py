@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ 1-concurrent_coroutines """
 import asyncio
-#from basic_async_syntax import wait_random
 
 
 wait_random = __import__('0-basic_async_syntax').wait_random
+
 
 async def wait_n(n, max_delay):
     """
