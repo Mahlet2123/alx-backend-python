@@ -2,7 +2,7 @@
 """ test_utils module """
 import unittest
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from typing import Mapping, Sequence
 from unittest.mock import patch, Mock
 
@@ -66,6 +66,34 @@ class TestGetJson(unittest.TestCase):
 
         result = get_json(url)
         self.assertEqual(result, data_response)
+
+
+class TestMemoize(unittest.TestCase):
+    """ test the utils.memoize """
+    def test_memoize(self):
+        """
+        Test that when calling a_property twice, the correct
+        result is returned but a_method is only called once
+        using assert_called_once.
+        """
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        instance = TestClass()
+
+        with patch.object(instance, 'a_method') as mock_a_method:
+            mock_a_method.return_value = 42
+
+            instance.a_property
+            instance.a_property
+
+        mock_a_method.assert_called_once()
 
 
 if __name__ == '__main__':
