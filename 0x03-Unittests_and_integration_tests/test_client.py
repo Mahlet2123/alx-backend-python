@@ -28,7 +28,9 @@ class TestGithubOrgClient(unittest.TestCase):
 
         org_client = GithubOrgClient(org)
         self.assertEqual(org_client.org(), data_response)
-        mock_get.assert_called_once_with(GithubOrgClient.ORG_URL.format(org = org))
+        mock_get.assert_called_once_with(
+                GithubOrgClient.ORG_URL.format(org=org)
+                )
 
     @parameterized.expand([
         ('google', {'repos_url': "https://api.github.com/users/google/repos"}),
@@ -46,9 +48,11 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         mock_org.return_value = data_response
         org_client = GithubOrgClient(org)
-        self.assertEqual(org_client._public_repos_url, data_response['repos_url'])
+        self.assertEqual(
+                org_client._public_repos_url,
+                data_response['repos_url']
+                )
 
 
 if __name__ == '__main__':
     unittest.main()
-
