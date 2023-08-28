@@ -47,13 +47,13 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(
                 org_client._public_repos_url,
                 "https://api.github.com/users/abc/repos"
-        )
+                )
 
     @patch('client.get_json')
     def test_public_repos(
             self,
             mock_get: Mock
-        ) -> bool:
+            ) -> bool:
         """
         To unit-test GithubOrgClient.public_repos
         """
@@ -110,8 +110,7 @@ class TestGithubOrgClient(unittest.TestCase):
             )
             mock_public_repos.assert_called_once()
         mock_get.assert_called_once()
-        
-       
+
 
 if __name__ == '__main__':
     unittest.main()
