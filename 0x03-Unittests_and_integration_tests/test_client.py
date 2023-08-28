@@ -4,7 +4,7 @@ import unittest
 from parameterized import parameterized
 from client import GithubOrgClient
 from utils import get_json
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -13,20 +13,37 @@ class TestGithubOrgClient(unittest.TestCase):
         ('google', {"payload": True}),
         ('abc', {"payload": True})
         ])
-    @patch('requests.get')
+    @patch('client.get_json')
     def test_org(
             self,
             org: str,
             data_response: dict,
-            mock_get: Mock
+            mock_get: MagicMock
             ) -> bool:
         """
         This method should test that GithubOrgClient.org
         returns the correct value.
         """
-        mock_json = Mock()
-        mock_json.json.return_value = data_response
-        mock_get.return_value = mock_json
+        mock_get.return_value = MagicMock(return_value=data_response)
 
-        result = get_json(GithubOrgClient.ORG_URL.format(org = org))
-        self.assertEqual(result, data_response)
+        org_client = GithubOrgClient(org)
+        self.assertEqual(org_client.org(), data_response)
+        mock_get.assert_called_once_with(GithubOrgClient.ORG_URL.format(org = org))
+
+    @patch('GithubOrgClient.org')
+    def test_public_repos_url(
+            self,
+            mock_org: Mock
+            ) -> bool:
+        """
+        method to unit-test GithubOrgClient._public_repos_url
+        """
+        data_response = {"payload": True}
+        mock_org.return_value = data_response
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()
+
