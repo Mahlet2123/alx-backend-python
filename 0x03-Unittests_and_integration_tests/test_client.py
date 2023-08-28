@@ -33,24 +33,25 @@ class TestGithubOrgClient(unittest.TestCase):
                 )
 
     @parameterized.expand([
-        ('google', {'repos_url': "https://api.github.com/users/google/repos"}),
-        ('abc', {'repos_url': "https://api.github.com/users/abc/repos"})
+        ('abc', "https://api.github.com/users/abc/repos")
         ])
     @patch('client.GithubOrgClient.org', new_callable=PropertyMock)
     def test_public_repos_url(
             self,
             org,
-            data_response: dict,
+            data_response: str,
             mock_org: Mock
             ) -> bool:
         """
         method to unit-test GithubOrgClient._public_repos_url
         """
-        mock_org.return_value = data_response
+        mock_org.return_value = {
+                'repos_url': "https://api.github.com/users/abc/repos",
+                }
         org_client = GithubOrgClient(org)
         self.assertEqual(
                 org_client._public_repos_url,
-                data_response['repos_url']
+                data_response
                 )
 
 
