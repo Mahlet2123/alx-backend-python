@@ -31,43 +31,30 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get.assert_called_once_with(
                 GithubOrgClient.ORG_URL.format(org=org)
                 )
-    """
+
     @parameterized.expand([
-        ('abc', "https://api.github.com/users/abc/repos")
-        ])
-    @patch('client.GithubOrgClient.org', new_callable=PropertyMock)
-    def test_public_repos_url1(
+        ('abc', "https://api.github.com/users/abc/repos")])
+    def test_public_repos_url(
             self,
-            org,
+            org: str,
             data_response: str,
-            mock_org: Mock
             ) -> bool:
-        """"""
+        """
         method to unit-test GithubOrgClient._public_repos_url
-        """"""
-        mock_org.return_value = {
+        """
+        with patch(
+                'client.GithubOrgClient.org',
+                new_callable=PropertyMock
+                ) as mock_org:
+            mock_org.return_value = {
                 'repos_url': "https://api.github.com/users/abc/repos",
-                }
+            }
         org_client = GithubOrgClient(org)
         self.assertEqual(
                 org_client._public_repos_url,
                 data_response
                 )
-        """
-    def test_public_repos_url(self) -> None:
-        """Tests the `_public_repos_url` property."""
-        with patch(
-                "client.GithubOrgClient.org",
-                new_callable=PropertyMock,
-                ) as mock_org:
-            mock_org.return_value = {
-                'repos_url': "https://api.github.com/users/google/repos",
-            }
-            self.assertEqual(
-                GithubOrgClient("google")._public_repos_url,
-                "https://api.github.com/users/google/repos",
-            )
-
+       
 
 if __name__ == '__main__':
     unittest.main()
