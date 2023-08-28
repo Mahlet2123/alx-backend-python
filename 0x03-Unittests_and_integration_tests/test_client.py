@@ -32,13 +32,7 @@ class TestGithubOrgClient(unittest.TestCase):
                 GithubOrgClient.ORG_URL.format(org=org)
                 )
 
-    @parameterized.expand([
-        ('abc', "https://api.github.com/users/abc/repos")])
-    def test_public_repos_url(
-            self,
-            org: str,
-            data_response: str,
-            ) -> bool:
+    def test_public_repos_url(self) -> bool:
         """
         method to unit-test GithubOrgClient._public_repos_url
         """
@@ -49,11 +43,11 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_org.return_value = {
                 'repos_url': "https://api.github.com/users/abc/repos",
             }
-        org_client = GithubOrgClient(org)
-        self.assertEqual(
+            org_client = GithubOrgClient('abc')
+            self.assertEqual(
                 org_client._public_repos_url,
-                data_response
-                )
+                "https://api.github.com/users/abc/repos"
+        )
        
 
 if __name__ == '__main__':
